@@ -31,5 +31,5 @@ pip install -r requirements.txt
 
 Then, just run the script:
 ```sh
-./covid-19-stats.py
+./covid-stats.py
 ```
