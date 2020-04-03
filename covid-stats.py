@@ -66,7 +66,9 @@ y2 = [stat['US']['confirmed'] for f, stat in stats[-20:]]
 x = [datetime.datetime.strptime(f, "%m-%d-%Y") for f, stat in stats[-20:]]
 fig, axs = plt.subplots(2)
 axs[0].plot(x, y1)
+axs[0].set_title('Deaths')
 axs[1].plot(x, y2)
+axs[1].set_title('Confirmed cases')
 
 for ax in axs:
     for tick in ax.get_xticklabels():
