@@ -61,9 +61,9 @@ for f, stat in stats[-15:]:
         f, stat['US']['confirmed'], stat['US']['deaths'],
         stat['US']['recovered']))
 
-y1 = [stat['US']['deaths'] for f, stat in stats[-20:]]
-y2 = [stat['US']['confirmed'] for f, stat in stats[-20:]]
-x = [datetime.datetime.strptime(f, "%m-%d-%Y") for f, stat in stats[-20:]]
+y1 = [stat['US']['deaths'] for f, stat in stats[40:]]
+y2 = [stat['US']['confirmed'] for f, stat in stats[40:]]
+x = [datetime.datetime.strptime(f, "%m-%d-%Y") for f, stat in stats[40:]]
 fig, axs = plt.subplots(2)
 axs[0].plot(x, y1)
 axs[0].set_title('Deaths')
