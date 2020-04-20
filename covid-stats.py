@@ -67,8 +67,10 @@ x = [datetime.datetime.strptime(f, "%m-%d-%Y") for f, stat in stats[40:]]
 fig, axs = plt.subplots(2)
 axs[0].plot(x, y1)
 axs[0].set_title('Deaths')
+axs[0].grid(True)
 axs[1].plot(x, y2)
 axs[1].set_title('Confirmed cases')
+axs[1].grid(True)
 
 for ax in axs:
     for tick in ax.get_xticklabels():
