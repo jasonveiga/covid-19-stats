@@ -7,6 +7,8 @@ import os
 import re
 import sys
 
+import population
+
 
 def get_args():
     parser = argparse.ArgumentParser(description='get some COVID-19 stats')
@@ -202,21 +204,58 @@ def graphit(data, country=None, state=None, admin=None):
     y2 = [
         get_stats(stat, country, state, admin)['confirmed'] for f, stat in data
     ]
+
+    if state and country == 'US':
+        y3 = [d * 100000 / population.data[state] for d in y1]
+        y4 = [c * 100000 / population.data[state] for c in y2]
+    elif country == 'US':
+        y3 = [d * 100000 / population.data['United States'] for d in y1]
+        y4 = [c * 100000 / population.data['United States'] for c in y2]
+    else:
+        y3 = None
+        y4 = None
+
     x = [datetime.datetime.strptime(f, "%m-%d-%Y") for f, stat in data]
-    fig, axs = plt.subplots(2)
 
     suffix = get_suffix(country, state, admin)
 
-    axs[0].plot(x, y1)
-    axs[0].set_title('Deaths {}'.format(suffix))
-    axs[0].grid(True)
-    axs[1].plot(x, y2)
-    axs[1].set_title('Confirmed cases {}'.format(suffix))
-    axs[1].grid(True)
+    if y3:
+        fig, axs = plt.subplots(nrows=2, ncols=2)
 
-    for ax in axs:
-        for tick in ax.get_xticklabels():
-            tick.set_rotation(45)
+        suffix = get_suffix(country, state, admin)
+
+        axs[0][0].plot(x, y1)
+        axs[0][0].set_title('Deaths {}'.format(suffix))
+        axs[0][0].grid(True)
+        axs[1][0].plot(x, y2)
+        axs[1][0].set_title('Confirmed cases {}'.format(suffix))
+        axs[1][0].grid(True)
+
+        axs[0][1].plot(x, y3)
+        axs[0][1].set_title('Per 100k deaths {}'.format(suffix))
+        axs[0][1].grid(True)
+        axs[1][1].plot(x, y4)
+        axs[1][1].set_title('Per 100k cases {}'.format(suffix))
+        axs[1][1].grid(True)
+
+        for a in axs:
+            for b in a:
+                for tick in b.get_xticklabels():
+                    tick.set_rotation(45)
+
+    else:
+        fig, axs = plt.subplots(2)
+
+        axs[0].plot(x, y1)
+        axs[0].set_title('Deaths {}'.format(suffix))
+        axs[0].grid(True)
+        axs[1].plot(x, y2)
+        axs[1].set_title('Confirmed cases {}'.format(suffix))
+        axs[1].grid(True)
+
+        for a in axs:
+            for tick in a.get_xticklabels():
+                tick.set_rotation(45)
 
     plt.tight_layout()
     plt.show()
